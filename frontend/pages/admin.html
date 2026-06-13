@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Admin</title>
+    <link rel="stylesheet" href="../css/global.css">
+</head>
+
+<body>
+    <main class="container">
+        <h2>Cargar Nuevo Producto</h2>
+        <form id="form-producto">
+            <input type="text" id="prod-nombre" placeholder="Nombre del producto" required><br><br>
+            <textarea id="prod-desc" placeholder="Descripción" required></textarea><br><br>
+            <input type="number" id="prod-precio" placeholder="Precio" required><br><br>
+            <input type="text" id="prod-genero" placeholder="Género (Ej: Femenino)"><br><br>
+            <input type="number" id="prod-categoria" placeholder="ID Categoría" required><br><br>
+            <input type="text" id="prod-img" placeholder="URL de la imagen"><br><br>
+            <button type="submit">Guardar Producto</button>
+        </form>
+    </main>
+    <script type="module" src="../js/admin.js"></script>
+</body>
+
+</html>
