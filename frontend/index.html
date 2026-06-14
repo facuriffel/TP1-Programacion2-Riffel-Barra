@@ -10,6 +10,29 @@
 <body>
     <main class="container">
         <h1>Catálogo de Productos</h1>
+
+        <!-- Barra de Filtros[cite: 1] -->
+        <div id="filtros-container"
+            style="margin-bottom: 20px; padding: 10px; background: var(--nav-bg); border-radius: 8px;">
+            <label>Filtrar por:</label>
+            <select id="filtro-genero">
+                <option value="">Todos los géneros</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Unisex">Unisex</option>
+            </select>
+
+            <select id="filtro-color">
+                <option value="">Todos los colores</option>
+                <option value="Negro">Negro</option>
+                <option value="Blanco">Blanco</option>
+                <option value="Rojo">Rojo</option>
+                <option value="Azul">Azul</option>
+            </select>
+
+            <button id="btn-aplicar-filtros">Aplicar Filtros</button>
+        </div>
+
         <div id="grilla-productos"></div>
     </main>
     <script type="module" src="js/catalogo.js"></script>
