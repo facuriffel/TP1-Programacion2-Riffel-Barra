@@ -3,22 +3,53 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Panel Admin</title>
+    <title>Panel Admin - Lana & Lino</title>
     <link rel="stylesheet" href="../css/global.css">
 </head>
 
 <body>
     <main class="container">
-        <h2>Cargar Nuevo Producto</h2>
-        <form id="form-producto">
-            <input type="text" id="prod-nombre" placeholder="Nombre del producto" required><br><br>
-            <textarea id="prod-desc" placeholder="Descripción" required></textarea><br><br>
-            <input type="number" id="prod-precio" placeholder="Precio" required><br><br>
-            <input type="text" id="prod-genero" placeholder="Género (Ej: Femenino)"><br><br>
-            <input type="number" id="prod-categoria" placeholder="ID Categoría" required><br><br>
-            <input type="text" id="prod-img" placeholder="URL de la imagen"><br><br>
-            <button type="submit">Guardar Producto</button>
-        </form>
+        <h1>Gestionar Productos</h1>
+
+        <!-- Sección para Buscar y Modificar[cite: 1] -->
+        <section style="background: var(--nav-bg); padding: 20px; margin-bottom: 20px; border-radius: 8px;">
+            <h2>Buscar para Modificar</h2>
+            <input type="number" id="buscar-id-prod" placeholder="ID del Producto a modificar">
+            <button id="btn-buscar-modificar">Buscar Producto</button>
+            <p id="msj-busqueda"></p>
+        </section>
+
+        <!-- Formulario (Sirve para crear y para modificar) -->
+        <section style="background: var(--nav-bg); padding: 20px; border-radius: 8px;">
+            <h2 id="titulo-formulario">Cargar Nuevo Producto</h2>
+            <form id="form-producto">
+                <input type="hidden" id="prod-id"> <!-- Oculto, se llena si estamos modificando -->
+
+                <label>Nombre:</label><br>
+                <input type="text" id="prod-nombre" required><br><br>
+
+                <label>Descripción:</label><br>
+                <textarea id="prod-desc" required></textarea><br><br>
+
+                <label>Precio:</label><br>
+                <input type="number" id="prod-precio" required><br><br>
+
+                <label>Género:</label><br>
+                <input type="text" id="prod-genero"><br><br>
+
+                <label>Color:</label><br>
+                <input type="text" id="prod-color"><br><br>
+
+                <label>ID Categoría:</label><br>
+                <input type="number" id="prod-categoria" required><br><br>
+
+                <label>Talles / Stock Disponibles:</label><br>
+                <input type="number" id="prod-stock" required placeholder="Cantidad"><br><br>
+
+                <button type="submit" id="btn-guardar-prod">Guardar Producto</button>
+                <button type="button" id="btn-cancelar-edicion" style="display:none;">Cancelar Edición</button>
+            </form>
+        </section>
     </main>
     <script type="module" src="../js/admin.js"></script>
 </body>
