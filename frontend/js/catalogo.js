@@ -1,31 +1,85 @@
 import { renderHeader } from '../components/header.js';
 import { consultarAPI } from './api.js';
 
-renderHeader();
+let todosLosProductos = [];
 
-async function cargarCatalogo() {
+async function iniciarCatalogo() {
+    await renderHeader();
+
     try {
         const contenedor = document.getElementById('grilla-productos');
         contenedor.innerHTML = '<p>Cargando productos...</p>';
 
-        // Llamada al backend
-        const res = await consultarAPI('/obtenerProductos'); //
-        const productos = res.data || res; // Ajustar según respuesta exacta de la API
+        // Traemos todo del backend
+        const res = await consultarAPI('/obtenerProductos');
+        todosLosProductos = res.data || res;
 
-        contenedor.innerHTML = '';
-        productos.forEach(prod => {
-            contenedor.innerHTML += `
-                <div class="card">
-                    <img src="${prod.imagen || 'https://via.placeholder.com/150'}" alt="${prod.nombre}">
-                    <h3>${prod.nombre}</h3>
-                    <p>$${prod.precio}</p>
-                    <a href="/pages/producto.html?id=${prod.id_producto}">Ver detalles</a>
-                </div>
-            `;
-        });
+        aplicarFiltrosDesdeURL();
+
     } catch (error) {
         console.error("Error al cargar productos", error);
+        document.getElementById('grilla-productos').innerHTML = '<p>Error al cargar el servidor.</p>';
     }
+
+    // Event listener del botón de la barra de filtros
+    document.getElementById('btn-aplicar-filtros').addEventListener('click', () => {
+        filtrarYRenderizar();
+    });
 }
 
-cargarCatalogo();
+function aplicarFiltrosDesdeURL() {
+    const params = new URLSearchParams(window.location.search);
+    const busqueda = params.get('buscar') ? params.get('buscar').toLowerCase() : null;
+    const categoria = params.get('categoria');
+
+    let productosFiltrados = todosLosProductos;
+
+
+    if (busqueda) {
+        productosFiltrados = productosFiltrados.filter(p => p.nombre.toLowerCase().includes(busqueda));
+    }
+
+
+    if (categoria) {
+        // Asumiendo que el id de categoría en el producto se llama id_categoria
+        productosFiltrados = productosFiltrados.filter(p => p.id_categoria == categoria);
+    }
+
+    renderizarProductos(productosFiltrados);
+}
+
+function filtrarYRenderizar() {
+    const generoVal = document.getElementById('filtro-genero').value;
+    const colorVal = document.getElementById('filtro-color').value.toLowerCase();
+
+    let filtrados = todosLosProductos;
+
+    if (generoVal) filtrados = filtrados.filter(p => p.genero === generoVal); //[cite: 1]
+    if (colorVal) filtrados = filtrados.filter(p => p.color && p.color.toLowerCase().includes(colorVal)); //[cite: 1]
+
+    renderizarProductos(filtrados);
+}
+
+function renderizarProductos(productos) {
+    const contenedor = document.getElementById('grilla-productos');
+    contenedor.innerHTML = '';
+
+    if (productos.length === 0) {
+        contenedor.innerHTML = '<p>No se encontraron productos con esos filtros.</p>';
+        return;
+    }
+
+    productos.forEach(prod => {
+        contenedor.innerHTML += `
+            <div class="card">
+                <img src="${prod.imagen || 'https://via.placeholder.com/150'}" alt="${prod.nombre}">
+                <h3>${prod.nombre}</h3>
+                <p>Color: ${prod.color || 'N/A'}</p>
+                <p><strong>$${prod.precio}</strong></p>
+                <a href="/frontend/pages/producto.html?id=${prod.id_producto}">Ver detalles</a>
+            </div>
+        `;
+    });
+}
+
+iniciarCatalogo();
