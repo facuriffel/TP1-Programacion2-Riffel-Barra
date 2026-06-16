@@ -1,3 +1,5 @@
+import { consultarAPI } from './api.js';
+
 const formPerfil = document.getElementById('form-perfil');
 // Recuperamos el ID del usuario que guardamos en el Login
 const idUsuario = localStorage.getItem('id_usuario');
@@ -14,13 +16,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Pedimos los datos del usuario al backend
         const respuesta = await consultarAPI(`/obtenerUsuario/${idUsuario}`, 'GET');
+        const datos = respuesta.payload && respuesta.payload[0] ? respuesta.payload[0] : respuesta;
 
-        if (respuesta) {
+        if (datos) {
             // Rellenamos los campos con lo que nos devuelve la base de datos
-            document.getElementById('perfil-nombre').value = respuesta.nombre || '';
-            document.getElementById('perfil-email').value = respuesta.email || '';
-            document.getElementById('perfil-direccion').value = respuesta.direccion || '';
-            document.getElementById('perfil-telefono').value = respuesta.telefono || '';
+            document.getElementById('perfil-nombre').value = datos.nombre || '';
+            document.getElementById('perfil-email').value = datos.email || '';
+            document.getElementById('perfil-direccion').value = datos.direccion || '';
+            document.getElementById('perfil-telefono').value = datos.telefono || '';
         }
     } catch (error) {
         console.error('Error al cargar el perfil:', error);

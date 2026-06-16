@@ -1,3 +1,4 @@
+import { consultarAPI } from './api.js';
 
 const formLogin = document.getElementById('form-login');
 const formRegister = document.getElementById('form-register');
@@ -12,9 +13,12 @@ formLogin.addEventListener('submit', async (e) => {
     try {
         const respuesta = await consultarAPI('/login', 'POST', { email, password });
 
-        if (respuesta && respuesta.token) {
-            localStorage.setItem('token_jwt', respuesta.token);
-            localStorage.setItem('id_usuario', respuesta.usuario.id);
+        if (respuesta && respuesta.codigo === 200 && respuesta.jwt) {
+            localStorage.setItem('token_jwt', respuesta.jwt);
+            const user = respuesta.payload && respuesta.payload[0] ? respuesta.payload[0] : null;
+            if (user && user.id_usuario) {
+                localStorage.setItem('id_usuario', user.id_usuario);
+            }
 
             alert('¡Inicio de sesión exitoso!');
             window.location.href = '../index.html';

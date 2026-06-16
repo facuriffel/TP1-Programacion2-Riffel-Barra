@@ -1,4 +1,4 @@
-import { renderHeader } from '../components/header.js';
+import { renderHeader } from './header.js';
 import { consultarAPI } from './api.js';
 
 renderHeader();
@@ -14,7 +14,22 @@ async function cargarDetalle() {
     }
 
     try {
-        const prod = await consultarAPI(`/obtenerDatosProducto/${id}`); //
+        const respuesta = await consultarAPI(`/obtenerDatosProducto/${id}`); //
+        const item = respuesta.payload && respuesta.payload[0] ? respuesta.payload[0] : respuesta;
+
+        if (!item) {
+            container.innerHTML = '<p>Producto no encontrado.</p>';
+            return;
+        }
+
+        const prod = {
+            nombre: item.producto || item.nombre || '',
+            descripcion: item.descripcion || '',
+            precio: item.precio || 0,
+            imagen: item.ulrImagen || item.imagen || '',
+            stock: item.stock !== undefined ? item.stock : 0,
+            id_inventario: item.idInventario || item.id_inventario
+        };
 
         container.innerHTML = `
             <div style="display: flex; gap: 20px;">

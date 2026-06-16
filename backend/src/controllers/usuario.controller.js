@@ -81,12 +81,12 @@ const crearUsuario = async (req, res) => {
 
         const usuario = {
             nombre,
-            apellido,
-            direccion,
+            apellido: apellido || '',
+            direccion: direccion || '',
             password,
             email,
-            telefono,
-            rol,
+            telefono: telefono || '',
+            rol: rol || 'cliente',
         }
 
         const connection = await getConnection();

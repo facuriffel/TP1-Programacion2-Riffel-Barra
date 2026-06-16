@@ -1,3 +1,5 @@
+import { consultarAPI } from './api.js';
+
 const listaFavoritos = document.getElementById('lista-favoritos');
 const idUsuario = localStorage.getItem('id_usuario');
 
@@ -17,8 +19,10 @@ async function cargarFavoritos() {
         const respuesta = await consultarAPI(`/obtenerFavoritos/${idUsuario}`, 'GET');
         listaFavoritos.innerHTML = '';
 
-        if (respuesta && respuesta.length > 0) {
-            respuesta.forEach(producto => {
+        const favoritos = respuesta.payload || respuesta;
+
+        if (favoritos && favoritos.length > 0) {
+            favoritos.forEach(producto => {
                 listaFavoritos.innerHTML += `
                     <div class="product-card">
                         <h3>${producto.nombre}</h3>
