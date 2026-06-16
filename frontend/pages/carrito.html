@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Carrito - Lana & Lino</title>
+    <link rel="stylesheet" href="../css/global.css">
+</head>
+
+<body>
+    <main class="cart-container">
+        <h2>Carrito de Compras</h2>
+
+        <div id="lista-carrito" class="cart-items">
+        </div>
+
+        <div class="cart-summary">
+            <h3>Total: $<span id="total-carrito">0</span></h3>
+            <button id="btn-pagar" class="btn-primary" disabled>Proceder al Pago</button>
+        </div>
+    </main>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/carrito.js"></script>
+</body>
+
+</html>

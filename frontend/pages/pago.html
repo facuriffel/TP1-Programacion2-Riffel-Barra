@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago - Lana & Lino</title>
+    <link rel="stylesheet" href="../css/global.css">
+</head>
+
+<body>
+    <main class="payment-container">
+        <h2>Finalizar Compra</h2>
+
+        <form id="form-pago">
+            <div class="form-group">
+                <label for="metodo-pago">Método de Pago</label>
+                <select id="metodo-pago" required>
+                    <option value="">Seleccioná una opción...</option>
+                    <option value="tarjeta">Tarjeta de Crédito/Débito</option>
+                    <option value="transferencia">Transferencia Bancaria</option>
+                </select>
+            </div>
+
+            <div id="datos-tarjeta" style="display: none;">
+                <input type="text" id="num-tarjeta" placeholder="Número de tarjeta (16 dígitos)">
+                <input type="text" id="titular-tarjeta" placeholder="Nombre del titular">
+            </div>
+
+            <button type="submit" class="btn-primary">Confirmar Pago</button>
+        </form>
+    </main>
+
+    <script src="../js/pago.js"></script>
+</body>
+
+</html>
