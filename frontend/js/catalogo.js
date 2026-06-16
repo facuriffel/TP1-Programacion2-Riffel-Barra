@@ -1,4 +1,4 @@
-import { renderHeader } from '../components/header.js';
+import { renderHeader } from './header.js';
 import { consultarAPI } from './api.js';
 
 let todosLosProductos = [];
@@ -12,7 +12,7 @@ async function iniciarCatalogo() {
 
         // Traemos todo del backend
         const res = await consultarAPI('/obtenerProductos');
-        todosLosProductos = res.data || res;
+        todosLosProductos = res.payload || res.data || res;
 
         aplicarFiltrosDesdeURL();
 
@@ -69,6 +69,8 @@ function renderizarProductos(productos) {
         return;
     }
 
+    const basePath = window.location.pathname.includes('/frontend/') ? '/frontend' : '';
+
     productos.forEach(prod => {
         contenedor.innerHTML += `
             <div class="card">
@@ -76,7 +78,7 @@ function renderizarProductos(productos) {
                 <h3>${prod.nombre}</h3>
                 <p>Color: ${prod.color || 'N/A'}</p>
                 <p><strong>$${prod.precio}</strong></p>
-                <a href="/frontend/pages/producto.html?id=${prod.id_producto}">Ver detalles</a>
+                <a href="${basePath}/pages/producto.html?id=${prod.id_producto}">Ver detalles</a>
             </div>
         `;
     });

@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3000/api';
+const BASE_URL = 'http://127.0.0.1:4000/api';
 
 export async function consultarAPI(endpoint, metodo = 'GET', cuerpo = null) {
     const token = localStorage.getItem('token_jwt');

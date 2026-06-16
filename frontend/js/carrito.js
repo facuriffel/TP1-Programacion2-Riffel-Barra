@@ -1,3 +1,5 @@
+import { consultarAPI } from './api.js';
+
 const listaCarrito = document.getElementById('lista-carrito');
 const totalCarritoEl = document.getElementById('total-carrito');
 const btnPagar = document.getElementById('btn-pagar');
@@ -18,8 +20,10 @@ async function cargarCarrito() {
         listaCarrito.innerHTML = '';
         let total = 0;
 
-        if (respuesta && respuesta.length > 0) {
-            respuesta.forEach(item => {
+        const items = respuesta.payload || respuesta;
+
+        if (items && items.length > 0) {
+            items.forEach(item => {
                 total += item.precio * item.cantidad;
                 listaCarrito.innerHTML += `
                     <div class="cart-item">

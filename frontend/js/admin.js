@@ -1,4 +1,4 @@
-import { renderHeader } from '../components/header.js';
+import { renderHeader } from './header.js';
 import { consultarAPI } from './api.js';
 
 renderHeader();
