@@ -21,7 +21,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (datos) {
             // Rellenamos los campos con lo que nos devuelve la base de datos
             document.getElementById('perfil-nombre').value = datos.nombre || '';
+            document.getElementById('perfil-apellido').value = datos.apellido || '';
             document.getElementById('perfil-email').value = datos.email || '';
+            document.getElementById('perfil-password').value = datos.password || '';
             document.getElementById('perfil-direccion').value = datos.direccion || '';
             document.getElementById('perfil-telefono').value = datos.telefono || '';
         }
@@ -37,8 +39,12 @@ formPerfil.addEventListener('submit', async (e) => {
     // Capturamos lo nuevo que escribió el usuario
     const datosActualizados = {
         nombre: document.getElementById('perfil-nombre').value,
+        apellido: document.getElementById('perfil-apellido').value,
+        email: document.getElementById('perfil-email').value,
+        password: document.getElementById('perfil-password').value,
         direccion: document.getElementById('perfil-direccion').value,
-        telefono: document.getElementById('perfil-telefono').value
+        telefono: document.getElementById('perfil-telefono').value,
+        rol: localStorage.getItem('rol') || 'cliente'
     };
 
     try {

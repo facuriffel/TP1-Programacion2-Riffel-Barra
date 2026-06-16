@@ -18,6 +18,7 @@ formLogin.addEventListener('submit', async (e) => {
             const user = respuesta.payload && respuesta.payload[0] ? respuesta.payload[0] : null;
             if (user && user.id_usuario) {
                 localStorage.setItem('id_usuario', user.id_usuario);
+                localStorage.setItem('rol', user.rol || 'cliente');
             }
 
             alert('¡Inicio de sesión exitoso!');
@@ -34,11 +35,22 @@ formRegister.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const nombre = document.getElementById('reg-nombre').value;
+    const apellido = document.getElementById('reg-apellido').value;
+    const direccion = document.getElementById('reg-direccion').value;
+    const telefono = document.getElementById('reg-telefono').value;
     const email = document.getElementById('reg-email').value;
     const password = document.getElementById('reg-password').value;
 
     try {
-        const respuesta = await consultarAPI('/registrarUsuario', 'POST', { nombre, email, password });
+        const respuesta = await consultarAPI('/registrarUsuario', 'POST', {
+            nombre,
+            apellido,
+            direccion,
+            telefono,
+            email,
+            password,
+            rol: 'cliente'
+        });
 
         if (respuesta) {
             alert('¡Registro exitoso! Ahora podés iniciar sesión.');
