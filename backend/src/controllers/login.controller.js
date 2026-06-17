@@ -10,14 +10,15 @@ const login = async (req, res) => {
         } = req.body
         const connection = await getConnection();
         const respuesta = await connection.query("SELECT id_usuario, nombre, apellido, rol  FROM usuario WHERE email = ? AND password = ?", [email, password]);
-        const token = jwt.sign({
-            sub: respuesta.id,
-            name: respuesta.nombre,
-            exp: Date.now() + 60 * 30000
-        }, secret);
-        console.log(token)
         if(respuesta.length > 0){
             console.log("se encontro el usuario")
+            const usuario = respuesta[0];
+            const token = jwt.sign({
+                sub: usuario.id_usuario,
+                name: usuario.nombre,
+                exp: Date.now() + 60 * 30000
+            }, secret);
+            console.log(token)
             res.json({codigo: 200, mensaje: "OK", payload: respuesta, jwt: token});
         }
         else{

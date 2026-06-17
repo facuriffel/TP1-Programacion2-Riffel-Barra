@@ -61,7 +61,7 @@ export async function renderHeader() {
     }
 
     // ── Buscador ──
-    const btnBuscar    = document.getElementById('btn-buscar');
+    const btnBuscar = document.getElementById('btn-buscar');
     const inputBusqueda = document.getElementById('input-busqueda');
 
     const ejecutarBusqueda = () => {

@@ -11,10 +11,13 @@
     <main class="container">
         <h1>Catálogo de Productos</h1>
 
-        <!-- Barra de Filtros[cite: 1] -->
-        <div id="filtros-container"
-            style="margin-bottom: 20px; padding: 10px; background: var(--nav-bg); border-radius: 8px;">
+        <!-- Barra de Filtros -->
+        <div id="filtros-container">
             <label>Filtrar por:</label>
+            <select id="filtro-categoria">
+                <option value="">Todas las categorías</option>
+            </select>
+            
             <select id="filtro-genero">
                 <option value="">Todos los géneros</option>
                 <option value="Femenino">Femenino</option>
@@ -28,6 +31,12 @@
                 <option value="Blanco">Blanco</option>
                 <option value="Rojo">Rojo</option>
                 <option value="Azul">Azul</option>
+                <option value="Beige">Beige</option>
+                <option value="Verde">Verde</option>
+                <option value="Gris">Gris</option>
+                <option value="Amarillo">Amarillo</option>
+                <option value="Rosa">Rosa</option>
+                <option value="Natural">Natural</option>
             </select>
 
             <button id="btn-aplicar-filtros">Aplicar Filtros</button>

@@ -16,14 +16,17 @@
             <h2>Buscar para Modificar</h2>
             <input type="number" id="buscar-id-prod" placeholder="ID del Producto a modificar">
             <button id="btn-buscar-modificar">Buscar Producto</button>
+            <button id="btn-ver-todos" style="margin-left: 10px;">Ver Todos</button>
             <p id="msj-busqueda"></p>
+            <div id="lista-productos-admin" style="display:none; margin-top: 15px; max-height: 300px; overflow-y: auto; background: var(--clr-surface-2); padding: 15px; border-radius: 8px;"></div>
         </section>
 
         <!-- Formulario (Sirve para crear y para modificar) -->
         <section style="background: var(--nav-bg); padding: 20px; border-radius: 8px;">
             <h2 id="titulo-formulario">Cargar Nuevo Producto</h2>
             <form id="form-producto">
-                <input type="hidden" id="prod-id"> <!-- Oculto, se llena si estamos modificando -->
+                <label>ID del Producto:</label><br>
+                <input type="text" id="prod-id" disabled placeholder="Automático o buscado"><br><br>
 
                 <label>Nombre:</label><br>
                 <input type="text" id="prod-nombre" required><br><br>
@@ -31,19 +34,49 @@
                 <label>Descripción:</label><br>
                 <textarea id="prod-desc" required></textarea><br><br>
 
+                <label>URL de la Imagen:</label><br>
+                <input type="text" id="prod-imagen" placeholder="https://..."><br><br>
+
                 <label>Precio:</label><br>
                 <input type="number" id="prod-precio" required><br><br>
 
                 <label>Género:</label><br>
-                <input type="text" id="prod-genero"><br><br>
+                <select id="prod-genero">
+                    <option value="">Seleccione...</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Unisex">Unisex</option>
+                </select><br><br>
 
                 <label>Color:</label><br>
-                <input type="text" id="prod-color"><br><br>
+                <select id="prod-color">
+                    <option value="">Seleccione...</option>
+                    <option value="Negro">Negro</option>
+                    <option value="Blanco">Blanco</option>
+                    <option value="Rojo">Rojo</option>
+                    <option value="Azul">Azul</option>
+                    <option value="Beige">Beige</option>
+                    <option value="Verde">Verde</option>
+                    <option value="Gris">Gris</option>
+                    <option value="Amarillo">Amarillo</option>
+                    <option value="Rosa">Rosa</option>
+                    <option value="Natural">Natural</option>
+                </select><br><br>
 
                 <label>ID Categoría:</label><br>
                 <input type="number" id="prod-categoria" required><br><br>
 
-                <label>Talles / Stock Disponibles:</label><br>
+                <label>Talle:</label><br>
+                <select id="prod-talle" required>
+                    <option value="Único">Único</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
+                </select><br><br>
+
+                <label>Stock Disponible:</label><br>
                 <input type="number" id="prod-stock" required placeholder="Cantidad"><br><br>
 
                 <button type="submit" id="btn-guardar-prod">Guardar Producto</button>

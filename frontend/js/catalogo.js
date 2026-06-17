@@ -57,6 +57,22 @@ async function iniciarCatalogo() {
             }
         }));
 
+        try {
+            const respuesta = await consultarAPI('/obtenerCategorias');
+            const categorias = respuesta.payload || respuesta;
+            const selectCategoria = document.getElementById('filtro-categoria');
+            if (Array.isArray(categorias) && selectCategoria) {
+                categorias.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat.id_categoria;
+                    option.textContent = cat.nombre;
+                    selectCategoria.appendChild(option);
+                });
+            }
+        } catch {
+            console.warn('No se pudieron cargar las categorías en el catálogo.');
+        }
+
         aplicarFiltrosDesdeURL();
 
     } catch (error) {
@@ -86,17 +102,21 @@ function aplicarFiltrosDesdeURL() {
     if (categoria) {
         // Asumiendo que el id de categoría en el producto se llama id_categoria
         productosFiltrados = productosFiltrados.filter(p => p.id_categoria == categoria);
+        const selectCategoria = document.getElementById('filtro-categoria');
+        if (selectCategoria) selectCategoria.value = categoria;
     }
 
     renderizarProductos(productosFiltrados);
 }
 
 function filtrarYRenderizar() {
+    const categoriaVal = document.getElementById('filtro-categoria').value;
     const generoVal = document.getElementById('filtro-genero').value;
     const colorVal = document.getElementById('filtro-color').value.toLowerCase();
 
     let filtrados = todosLosProductos;
 
+    if (categoriaVal) filtrados = filtrados.filter(p => p.id_categoria == categoriaVal);
     if (generoVal) filtrados = filtrados.filter(p => p.genero === generoVal); //[cite: 1]
     if (colorVal) filtrados = filtrados.filter(p => p.color && p.color.toLowerCase().includes(colorVal)); //[cite: 1]
 

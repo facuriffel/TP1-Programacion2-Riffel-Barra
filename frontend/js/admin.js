@@ -65,9 +65,11 @@ document.getElementById('btn-buscar-modificar').addEventListener('click', async 
         document.getElementById('prod-id').value = prod.idProducto || id;
         document.getElementById('prod-nombre').value = prod.producto || prod.nombre || '';
         document.getElementById('prod-desc').value = prod.descripcion || '';
+        document.getElementById('prod-imagen').value = prod.ulrImagen || prod.urlImagen || prod.imagen || '';
         document.getElementById('prod-precio').value = prod.precio || 0;
         document.getElementById('prod-genero').value = prod.genero || '';
         document.getElementById('prod-color').value = prod.color || '';
+        document.getElementById('prod-talle').value = prod.talle || '';
         document.getElementById('prod-categoria').value = prod.idCategoria || prod.id_categoria || '';
         document.getElementById('prod-stock').value = prod.stock || 0;
 
@@ -97,9 +99,11 @@ form.addEventListener('submit', async (e) => {
 
     const nombre = document.getElementById('prod-nombre').value;
     const descripcion = document.getElementById('prod-desc').value;
+    const imagen = document.getElementById('prod-imagen').value;
     const precio = parseFloat(document.getElementById('prod-precio').value);
     const genero = document.getElementById('prod-genero').value;
     const color = document.getElementById('prod-color').value;
+    const talle = document.getElementById('prod-talle').value;
     const id_categoria = parseInt(document.getElementById('prod-categoria').value);
     const stock = parseInt(document.getElementById('prod-stock').value);
 
@@ -116,7 +120,7 @@ form.addEventListener('submit', async (e) => {
             } else {
                 // 2. Si no tiene inventario, creamos uno con el stock indicado
                 await consultarAPI('/crearInventario', 'POST', {
-                    talle: 'Único',
+                    talle: talle || 'Único',
                     color: color || 'Único',
                     stock: stock,
                     id_producto: parseInt(idExistente)
@@ -132,7 +136,7 @@ form.addEventListener('submit', async (e) => {
                 precio,
                 genero,
                 id_categoria,
-                imagen: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&q=80' // imagen por defecto
+                imagen: imagen || 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&q=80' // imagen por defecto si se deja vacio
             });
 
             const payload = createRes.payload || createRes;
@@ -141,7 +145,7 @@ form.addEventListener('submit', async (e) => {
             // 2. Si se ingresó stock, creamos el inventario para el producto creado
             if (newId && stock > 0) {
                 await consultarAPI('/crearInventario', 'POST', {
-                    talle: 'Único',
+                    talle: talle || 'Único',
                     color: color || 'Único',
                     stock: stock,
                     id_producto: parseInt(newId)
@@ -154,5 +158,45 @@ form.addEventListener('submit', async (e) => {
     } catch (error) {
         console.error('Error al guardar producto:', error);
         alert('Error al guardar. Verifica si el backend está corriendo y si tienes permisos.');
+    }
+});
+
+document.getElementById('btn-ver-todos').addEventListener('click', async () => {
+    const contenedor = document.getElementById('lista-productos-admin');
+    
+    if (contenedor.style.display === 'block') {
+        contenedor.style.display = 'none';
+        return;
+    }
+
+    try {
+        contenedor.innerHTML = '<p>Cargando productos...</p>';
+        contenedor.style.display = 'block';
+        
+        const res = await consultarAPI('/obtenerProductos');
+        const productos = res.payload || res;
+        
+        if (!productos || productos.length === 0) {
+            contenedor.innerHTML = '<p>No hay productos cargados en la base de datos.</p>';
+            return;
+        }
+
+        let html = '<table style="width:100%; text-align:left; border-collapse: collapse;">';
+        html += '<tr><th style="border-bottom: 1px solid var(--clr-border); padding: 5px;">ID</th><th style="border-bottom: 1px solid var(--clr-border); padding: 5px;">Nombre</th><th style="border-bottom: 1px solid var(--clr-border); padding: 5px;">Precio</th></tr>';
+        
+        productos.forEach(p => {
+            html += `<tr>
+                <td style="padding: 5px; font-weight: bold; color: var(--clr-primary);">${p.id_producto || p.idProducto}</td>
+                <td style="padding: 5px;">${p.nombre || p.producto}</td>
+                <td style="padding: 5px;">$${p.precio}</td>
+            </tr>`;
+        });
+        
+        html += '</table>';
+        contenedor.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        contenedor.innerHTML = '<p style="color:var(--clr-danger);">Error al cargar los productos.</p>';
     }
 });
