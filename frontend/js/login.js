@@ -40,21 +40,32 @@ formRegister.addEventListener('submit', async (e) => {
     const telefono = document.getElementById('reg-telefono').value;
     const email = document.getElementById('reg-email').value;
     const password = document.getElementById('reg-password').value;
+    const adminSecret = document.getElementById('reg-admin-secret').value.trim();
 
     try {
-        const respuesta = await consultarAPI('/registrarUsuario', 'POST', {
+        const datosRegistro = {
             nombre,
             apellido,
             direccion,
             telefono,
             email,
             password,
-            rol: 'cliente'
-        });
+            rol: adminSecret ? 'Administrador' : 'cliente'
+        };
 
-        if (respuesta) {
+        if (adminSecret) {
+            datosRegistro.adminSecret = adminSecret;
+        }
+
+        const respuesta = await consultarAPI('/registrarUsuario', 'POST', datosRegistro);
+
+        if (respuesta && respuesta.codigo === 200) {
             alert('¡Registro exitoso! Ahora podés iniciar sesión.');
             formRegister.reset();
+        } else if (respuesta && respuesta.mensaje) {
+            alert(respuesta.mensaje);
+        } else {
+            alert('Hubo un problema al crear la cuenta.');
         }
     } catch (error) {
         console.error('Error en el registro:', error);

@@ -11,13 +11,13 @@ export async function renderHeader() {
     const rol = localStorage.getItem('rol');
 
     header.innerHTML = `
-        <div class="logo" style="display: flex; align-items: center; gap: 20px;">
+        <div class="logo">
             <h2>Lana &amp; Lino</h2>
             <!-- Desplegable de Productos -->
             <div class="dropdown-menu">
-                <a href="${basePath}/index.html" class="dropbtn" style="cursor: pointer; font-weight: 600; color: var(--clr-primary); text-decoration: none; padding: 8px 14px; border-radius: 99px;">Productos ▾</a>
-                <div class="dropdown-content" id="dropdown-categorias" style="display:none; position:absolute; background:var(--clr-surface); border:1.5px solid var(--clr-border); border-radius:8px; box-shadow:var(--shadow-md); z-index:2000; min-width:180px; margin-top:5px;">
-                    <a href="${basePath}/index.html" style="display:block; padding:10px 16px; text-decoration:none; color:var(--clr-text); font-weight:500;">Todos los productos</a>
+                <a href="${basePath}/index.html" class="dropbtn">Productos ▾</a>
+                <div class="dropdown-content" id="dropdown-categorias">
+                    <a href="${basePath}/index.html">Todos los productos</a>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@ export async function renderHeader() {
             <a href="${basePath}/pages/favoritos.html">♡ Favoritos</a>
             <a href="${basePath}/pages/carrito.html">🛒 Carrito</a>
             <a href="${basePath}/pages/perfil.html">Mi Perfil</a>
-            <a href="${basePath}/pages/admin.html" id="btn-admin" style="display:none;">Gestionar</a>
+            <a href="${basePath}/pages/admin.html" id="btn-admin">Gestionar</a>
             <a href="${token ? '#' : basePath + '/pages/login.html'}" id="btn-login">${token ? 'Cerrar Sesión' : 'Iniciar Sesión'}</a>
         </div>
     `;
@@ -42,7 +42,7 @@ export async function renderHeader() {
     // Mostrar botón gestionar si es administrador
     const btnAdmin = document.getElementById('btn-admin');
     if (token && rol === 'Administrador') {
-        btnAdmin.style.display = 'inline-block';
+        btnAdmin.style.display = 'inline-flex';
     } else {
         btnAdmin.style.display = 'none';
     }
@@ -108,7 +108,7 @@ export async function renderHeader() {
         const dropdownCategorias = document.getElementById('dropdown-categorias');
         if (Array.isArray(categorias)) {
             categorias.forEach(cat => {
-                dropdownCategorias.innerHTML += `<a href="${basePath}/index.html?categoria=${cat.id_categoria}" style="display:block; padding:10px 16px; text-decoration:none; color:var(--clr-text); font-weight:500;">${cat.nombre}</a>`;
+                dropdownCategorias.innerHTML += `<a href="${basePath}/index.html?categoria=${cat.id_categoria}">${cat.nombre}</a>`;
             });
         }
     } catch {
@@ -124,40 +124,30 @@ function renderFooter() {
     if (document.querySelector('footer')) return;
 
     const footer = document.createElement('footer');
-    footer.style = `
-        background: var(--clr-surface);
-        border-top: 1px solid var(--clr-border);
-        padding: 40px 32px 30px;
-        margin-top: auto;
-        color: var(--clr-text);
-        font-family: var(--font-body);
-        transition: var(--transition);
-        box-shadow: 0 -2px 15px rgba(0,0,0,.03);
-    `;
     footer.innerHTML = `
-        <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px; text-align: left;">
-            <div style="flex: 1.5; min-width: 250px;">
-                <h3 style="font-family: var(--font-display); font-size: 1.4rem; color: var(--clr-primary); margin-bottom: 12px; font-weight: bold;">Lana &amp; Lino</h3>
-                <p style="font-size: 0.9rem; opacity: 0.8; max-width: 380px; line-height: 1.6;">Prendas premium de alta calidad tejidas con pasión e historia. La moda más fresca, natural y confortable para vos.</p>
+        <div class="footer-container">
+            <div class="footer-column large">
+                <h3>Lana &amp; Lino</h3>
+                <p class="description">Prendas premium de alta calidad tejidas con pasión e historia. La moda más fresca, natural y confortable para vos.</p>
             </div>
-            <div style="flex: 1; min-width: 200px;">
-                <h4 style="margin-bottom: 12px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Contacto</h4>
-                <p style="font-size: 0.9rem; margin: 6px 0; opacity: 0.85;">📧 Email: contacto@lanaylino.com</p>
-                <p style="font-size: 0.9rem; margin: 6px 0; opacity: 0.85;">💬 WhatsApp: +54 341 555-5555</p>
-                <p style="font-size: 0.9rem; margin: 6px 0; opacity: 0.85;">📞 Teléfono: 0800-LANA-LINO</p>
+            <div class="footer-column">
+                <h4>Contacto</h4>
+                <p>📧 Email: contacto@lanaylino.com</p>
+                <p>💬 WhatsApp: +54 341 555-5555</p>
+                <p>📞 Teléfono: 0800-LANA-LINO</p>
             </div>
-            <div style="flex: 1; min-width: 150px;">
-                <h4 style="margin-bottom: 12px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Redes Sociales</h4>
-                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem;">
-                    <a href="#" style="color: var(--clr-primary); text-decoration: none; font-weight: 500; transition: var(--transition);">📷 Instagram</a>
-                    <a href="#" style="color: var(--clr-primary); text-decoration: none; font-weight: 500; transition: var(--transition);">📘 Facebook</a>
-                    <a href="#" style="color: var(--clr-primary); text-decoration: none; font-weight: 500; transition: var(--transition);">📌 Pinterest</a>
+            <div class="footer-column">
+                <h4>Redes Sociales</h4>
+                <div class="footer-links">
+                    <a href="#">📷 Instagram</a>
+                    <a href="#">📘 Facebook</a>
+                    <a href="#">📌 Pinterest</a>
                 </div>
             </div>
         </div>
-        <div style="max-width: 1280px; margin: 30px auto 0; padding-top: 20px; border-top: 1px solid var(--clr-border); text-align: center; font-size: 0.85rem; opacity: 0.7;">
+        <div class="footer-bottom">
             <p>Desarrollada con orgullo por los integrantes del grupo.</p>
-            <p style="margin-top: 5px;">&copy; 2026 Lana &amp; Lino. Todos los derechos reservados.</p>
+            <p>&copy; 2026 Lana &amp; Lino. Todos los derechos reservados.</p>
         </div>
     `;
     document.body.appendChild(footer);

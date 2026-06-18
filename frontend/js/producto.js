@@ -56,8 +56,8 @@ async function cargarDetalle() {
         };
 
         // Filtramos y normalizamos items válidos de inventario
-        const rawInventory = items.filter(item => 
-            (item.idInventario !== null && item.idInventario !== undefined) || 
+        const rawInventory = items.filter(item =>
+            (item.idInventario !== null && item.idInventario !== undefined) ||
             (item.id_inventario !== null && item.id_inventario !== undefined)
         );
         const inventory = rawInventory.map(item => ({
@@ -84,38 +84,38 @@ async function cargarDetalle() {
 
         // Renderizado del detalle
         container.innerHTML = `
-            <div class="product-detail-card" style="display: flex; gap: 40px; flex-wrap: wrap; margin-top: 20px;">
-                <div class="product-detail-image" style="flex: 1; max-width: 450px;">
-                    <img src="${prod.imagen}" style="max-width: 100%; border-radius: 8px; box-shadow: var(--shadow);">
+            <div class="product-detail-card">
+                <div class="product-detail-image">
+                    <img src="${prod.imagen}" alt="${prod.nombre}">
                 </div>
-                <div class="product-detail-info" style="flex: 1.5; min-width: 300px;">
+                <div class="product-detail-info">
                     <h2>${prod.nombre}</h2>
-                    <p style="margin: 15px 0; font-size: 1.1em; color: var(--text-color); opacity: 0.8;">${prod.descripcion}</p>
-                    <h3 style="font-size: 2em; margin-bottom: 20px; color: var(--text-color);">$${prod.precio.toLocaleString()}</h3>
+                    <p class="product-detail-desc">${prod.descripcion}</p>
+                    <h3 class="product-detail-price">$${prod.precio.toLocaleString()}</h3>
                     
-                    <div class="opciones-seleccion" style="margin-bottom: 20px;">
+                    <div class="opciones-seleccion">
                         ${uniqueColors.length > 0 ? `
-                            <div style="margin-bottom: 15px;">
-                                <label style="display:block; margin-bottom:5px; font-weight:bold;">Seleccione Color:</label>
-                                <select id="selector-color" style="padding:8px; border-radius:4px; width:100%; max-width:300px;">
+                            <div class="opcion-grupo">
+                                <label for="selector-color">Seleccione Color:</label>
+                                <select id="selector-color">
                                     ${uniqueColors.map(c => `<option value="${c}">${c}</option>`).join('')}
                                 </select>
                             </div>
                         ` : ''}
 
                         ${uniqueSizes.length > 0 ? `
-                            <div style="margin-bottom: 15px;">
-                                <label style="display:block; margin-bottom:5px; font-weight:bold;">Seleccione Talle:</label>
-                                <select id="selector-talle" style="padding:8px; border-radius:4px; width:100%; max-width:300px;">
+                            <div class="opcion-grupo">
+                                <label for="selector-talle">Seleccione Talle:</label>
+                                <select id="selector-talle">
                                     ${uniqueSizes.map(s => `<option value="${s}">${s}</option>`).join('')}
                                 </select>
                             </div>
                         ` : ''}
                     </div>
 
-                    <div style="margin-bottom: 25px;">
-                        <label style="display:block; margin-bottom:5px; font-weight:bold;">Plan de Cuotas:</label>
-                        <select id="selector-cuotas" style="padding:8px; border-radius:4px; width:100%; max-width:300px;">
+                    <div class="opcion-grupo">
+                        <label for="selector-cuotas">Plan de Cuotas:</label>
+                        <select id="selector-cuotas">
                             <option value="1">1 pago de $${prod.precio.toFixed(2)} (Sin interés)</option>
                             <option value="3">3 cuotas de $${(prod.precio / 3).toFixed(2)}</option>
                             <option value="6">6 cuotas de $${(prod.precio / 6).toFixed(2)}</option>
@@ -124,13 +124,13 @@ async function cargarDetalle() {
                         </select>
                     </div>
 
-                    <div id="indicador-stock" style="margin-bottom: 20px; font-weight: bold;"></div>
+                    <div id="indicador-stock"></div>
 
-                    <div class="detail-actions" style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <button id="btn-agregar-carrito" class="btn-primary" style="padding:12px 24px; font-size:1.1em;" disabled>
+                    <div class="detail-actions">
+                        <button id="btn-agregar-carrito" class="btn-primary" disabled>
                             Agregar al Carrito
                         </button>
-                        <button id="btn-favorito" class="btn-secondary" style="padding:12px 24px; font-size:1.1em;">
+                        <button id="btn-favorito" class="btn-secondary">
                             ${esFavorito ? '♥ Quitar de Favoritos' : '♡ Agregar a Favoritos'}
                         </button>
                     </div>
@@ -159,8 +159,8 @@ async function cargarDetalle() {
             const talleVal = talleSel ? talleSel.value : null;
 
             // Buscamos coincidencia en el inventario
-            selectedInventory = inventory.find(item => 
-                (!colorVal || item.color === colorVal) && 
+            selectedInventory = inventory.find(item =>
+                (!colorVal || item.color === colorVal) &&
                 (!talleVal || item.talle === talleVal)
             );
 
@@ -197,7 +197,7 @@ async function cargarDetalle() {
                     id_inventario: selectedInventory.idInventario,
                     id_usuario: parseInt(idUsuario)
                 });
-                
+
                 if (response && response.codigo === 200) {
                     alert('¡Producto agregado al carrito con éxito!');
                 } else {

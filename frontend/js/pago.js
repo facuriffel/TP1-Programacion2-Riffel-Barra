@@ -53,7 +53,7 @@ async function cargarResumenCompra() {
                 total += subtotal;
 
                 const itemDiv = document.createElement('div');
-                itemDiv.style = 'display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.95em; opacity:0.9;';
+                itemDiv.className = 'summary-item';
                 itemDiv.innerHTML = `
                     <span>${item.nombre} (x${item.cantidad})</span>
                     <span>$${subtotal.toLocaleString()}</span>

@@ -1,35 +1,35 @@
 import { getConnection } from "./../database/database";
 const secret = process.env.secret;
-const jwt = require ("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
 const obtenerDatosUsuario = async (req, res) => {
-    try{
+    try {
         const resultadoVerificar = verificarToken(req);
-        if(resultadoVerificar.estado == false){
-            return res.send({codigo: -1, mensaje: resultadoVerificar.error})
+        if (resultadoVerificar.estado == false) {
+            return res.send({ codigo: -1, mensaje: resultadoVerificar.error })
         }
         const id = req.params.id
         const connection = await getConnection();
-        const response = await connection.query("SELECT * from usuario u where u.id_usuario = ?",id);
-        if(response.length == 1){
-            res.json({codigo: 200, mensaje:"OK", payload: response})
+        const response = await connection.query("SELECT * from usuario u where u.id_usuario = ?", id);
+        if (response.length == 1) {
+            res.json({ codigo: 200, mensaje: "OK", payload: response })
         }
-        else{
-            res.json({codigo: -1, mensaje:"Usuario no encontrado", payload: []})
+        else {
+            res.json({ codigo: -1, mensaje: "Usuario no encontrado", payload: [] })
         }
 
     }
-    catch(error){
-            res.status(500);
-            res.send(error.message);
+    catch (error) {
+        res.status(500);
+        res.send(error.message);
     }
 }
 
 const modificarUsuario = async (req, res) => {
-    try{
+    try {
         const resultadoVerificar = verificarToken(req);
-        if(resultadoVerificar.estado == false){
-            return res.send({codigo: -1, mensaje: resultadoVerificar.error})
+        if (resultadoVerificar.estado == false) {
+            return res.send({ codigo: -1, mensaje: resultadoVerificar.error })
         }
         const { id } = req.params
         const {
@@ -52,23 +52,23 @@ const modificarUsuario = async (req, res) => {
             rol,
         }
         const connection = await getConnection();
-        const response = await connection.query("UPDATE usuario u SET ? where u.id_usuario = ?",[usuario,id]);
-        if(response.affectedRows > 0){
-            res.json({codigo: 200, mensaje:"OK", payload: []})
+        const response = await connection.query("UPDATE usuario u SET ? where u.id_usuario = ?", [usuario, id]);
+        if (response.affectedRows > 0) {
+            res.json({ codigo: 200, mensaje: "OK", payload: [] })
         }
-        else{
-            res.json({codigo: -1, mensaje:"Error modificando datos del usuario", payload: []})
+        else {
+            res.json({ codigo: -1, mensaje: "Error modificando datos del usuario", payload: [] })
         }
 
     }
-    catch(error){
-            res.status(500);
-            res.send(error.message);
+    catch (error) {
+        res.status(500);
+        res.send(error.message);
     }
 }
 
 const crearUsuario = async (req, res) => {
-    try{
+    try {
         const {
             nombre,
             apellido,
@@ -76,8 +76,19 @@ const crearUsuario = async (req, res) => {
             email,
             telefono,
             rol,
-            password
+            password,
+            adminSecret
         } = req.body
+
+        let finalRol = 'cliente';
+        if (rol === 'Administrador') {
+            const secretKeyAdmin = process.env.ADMIN_SECRET || 'LanaYLinoAdmin2026';
+            if (adminSecret === secretKeyAdmin) {
+                finalRol = 'Administrador';
+            } else {
+                return res.json({ codigo: -1, mensaje: "Clave de administrador incorrecta", payload: [] });
+            }
+        }
 
         const usuario = {
             nombre,
@@ -86,20 +97,20 @@ const crearUsuario = async (req, res) => {
             password,
             email,
             telefono: telefono || '',
-            rol: rol || 'cliente',
+            rol: finalRol,
         }
 
         const connection = await getConnection();
-        const response = await connection.query("INSERT INTO usuario set ?",usuario)
-        if(response && response.affectedRows > 0){
-            res.json ({codigo: 200, mensaje: "Usuario registrado exitosamente", payload: [{id_usuario: response.insertId}]});
+        const response = await connection.query("INSERT INTO usuario set ?", usuario)
+        if (response && response.affectedRows > 0) {
+            res.json({ codigo: 200, mensaje: "Usuario registrado exitosamente", payload: [{ id_usuario: response.insertId }] });
         }
-        else{
-            res.json({codigo: -1, mensaje: "Error registrando usuario", payload: []});
+        else {
+            res.json({ codigo: -1, mensaje: "Error registrando usuario", payload: [] });
         }
-        
+
     }
-    catch(error){
+    catch (error) {
         res.status(500);
         res.send(error.message);
     }
@@ -107,21 +118,22 @@ const crearUsuario = async (req, res) => {
 
 
 
-function verificarToken(req){
+function verificarToken(req) {
     const token = req.headers.authorization;
-    if(!token){
-        return {estado: false, error: "Token no proporcionado"}
+    if (!token) {
+        return { estado: false, error: "Token no proporcionado" }
     }
-    try{
+    try {
         const payload = jwt.verify(token, secret);
-        if(Date.now() > payload.exp){
-            return {estado: false, error: "Token expirado"}
+        if (Date.now() > payload.exp) {
+            return { estado: false, error: "Token expirado" }
         }
-        return {estado: true};
+        return { estado: true };
     }
-    catch(error){
-        return {estado: false, error: "Token inválido"}
-    }  
+    catch (error) {
+        console.error("verificarToken error in usuario.controller.js:", error);
+        return { estado: false, error: "Token inválido" }
+    }
 
 }
 

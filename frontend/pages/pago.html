@@ -4,25 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pago - Lana & Lino</title>
+    <title>Pago - Lana &amp; Lino</title>
     <link rel="stylesheet" href="../css/global.css">
 </head>
 
 <body>
-    <main class="payment-container" style="max-width: 600px; margin: 40px auto; padding: 20px; background: var(--nav-bg); border-radius: 8px; box-shadow: var(--shadow);">
+    <main class="payment-container">
         <h2>Finalizar Compra</h2>
 
         <!-- Resumen de compra -->
-        <div id="resumen-compra" style="margin-bottom: 25px; padding: 15px; border-bottom: 1px solid var(--border-color);">
+        <div id="resumen-compra" class="payment-summary">
             <h3>Resumen de Productos</h3>
             <div id="resumen-items">Cargando productos...</div>
-            <h4 style="text-align: right; margin-top: 15px; font-size: 1.2em;">Total a Pagar: $<span id="total-pago">0</span></h4>
+            <h4 class="payment-total">Total a Pagar: $<span id="total-pago">0</span></h4>
         </div>
 
         <form id="form-pago">
-            <div class="form-group" style="margin-bottom: 15px;">
-                <label for="metodo-pago" style="display:block; margin-bottom:5px; font-weight:bold;">Método de Pago</label>
-                <select id="metodo-pago" required style="padding:10px; border-radius:4px; width:100%;">
+            <div class="form-group">
+                <label for="metodo-pago">Método de Pago</label>
+                <select id="metodo-pago" required>
                     <option value="">Seleccioná una opción...</option>
                     <option value="transferencia">Transferencia Bancaria</option>
                     <option value="debito">Tarjeta de Débito</option>
@@ -30,22 +30,22 @@
                 </select>
             </div>
 
-            <div id="datos-tarjeta" style="display: none; margin-top: 15px;">
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <label for="num-tarjeta" style="display:block; margin-bottom:5px; font-weight:bold;">Número de Tarjeta</label>
-                    <input type="text" id="num-tarjeta" placeholder="16 dígitos" style="padding:10px; border-radius:4px; width:100%;">
+            <div id="datos-tarjeta" style="display: none;">
+                <div class="form-group">
+                    <label for="num-tarjeta">Número de Tarjeta</label>
+                    <input type="text" id="num-tarjeta" placeholder="16 dígitos">
                 </div>
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <label for="vencimiento-tarjeta" style="display:block; margin-bottom:5px; font-weight:bold;">Fecha de Vencimiento (MM/AA)</label>
-                    <input type="text" id="vencimiento-tarjeta" placeholder="MM/AA" style="padding:10px; border-radius:4px; width:100%;">
+                <div class="form-group">
+                    <label for="vencimiento-tarjeta">Fecha de Vencimiento (MM/AA)</label>
+                    <input type="text" id="vencimiento-tarjeta" placeholder="MM/AA">
                 </div>
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <label for="titular-tarjeta" style="display:block; margin-bottom:5px; font-weight:bold;">Nombre en la Tarjeta</label>
-                    <input type="text" id="titular-tarjeta" placeholder="Nombre completo del titular" style="padding:10px; border-radius:4px; width:100%;">
+                <div class="form-group">
+                    <label for="titular-tarjeta">Nombre en la Tarjeta</label>
+                    <input type="text" id="titular-tarjeta" placeholder="Nombre completo del titular">
                 </div>
             </div>
 
-            <button type="submit" id="btn-pagar" class="btn-primary" style="width:100%; padding:12px;" disabled>Confirmar Pago</button>
+            <button type="submit" id="btn-pagar" class="btn-primary" disabled>Confirmar Pago</button>
         </form>
     </main>
 

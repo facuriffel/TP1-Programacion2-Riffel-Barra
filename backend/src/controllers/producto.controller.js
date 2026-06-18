@@ -1,6 +1,6 @@
 import { getConnection } from "./../database/database";
 const secret = process.env.secret;
-const jwt = require ("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
 const QUERY = "select p.id_producto as idProducto, p.nombre as producto, p.descripcion as descripcion, p.precio as precio, p.genero as genero, p.imagen as ulrImagen, c.id_categoria as idCategoria, c.nombre as categoria from producto p join categoria c on p.id_categoria = c.id_categoria;";
 
@@ -33,27 +33,27 @@ const obtenerProductos = async (req, res) => {
     }
 };
 
-const obtenerDatosProducto = async (req,res) => {
-    try{
+const obtenerDatosProducto = async (req, res) => {
+    try {
         const id = req.params.id
         const connection = await getConnection();
         const response = await connection.query("select p.nombre as producto, p.descripcion as descripcion, p.precio as precio, p.genero as genero, p.imagen as ulrImagen, c.id_categoria as idCategoria, c.nombre as categoria, i.talle, i.color, i.stock, i.id_inventario as idInventario from producto p join categoria c on p.id_categoria = c.id_categoria join inventario i on i.id_producto = p.id_producto where p.id_producto = ?;", [id]);
         console.log(response)
-        res.json({codigo: 200, mensaje: "OK", payload:  response});
-    }   
-    catch(error){
+        res.json({ codigo: 200, mensaje: "OK", payload: response });
+    }
+    catch (error) {
         res.status(500);
         res.send(error.message);
     }
 }
 
 const cargarProducto = async (req, res) => {
-    try{
+    try {
         const resultadoVerificar = verificarToken(req);
-        if(resultadoVerificar.estado == false){
-            return res.send({codigo: -1, mensaje: resultadoVerificar.error})
+        if (resultadoVerificar.estado == false) {
+            return res.send({ codigo: -1, mensaje: resultadoVerificar.error })
         }
-        const{
+        const {
             nombre,
             descripcion,
             precio,
@@ -71,62 +71,63 @@ const cargarProducto = async (req, res) => {
         }
         const connection = await getConnection();
         const response = await connection.query("INSERT into producto set ?", producto);
-        if(response && response.affectedRows > 0){
+        if (response && response.affectedRows > 0) {
             res.json({
                 codigo: 200,
                 mensaje: "Producto cargado",
                 payload: [{ idProducto: response.insertId }]
             });
         }
-        else{
-            res.json({codigo: -1, mensaje: "Error cargando producto", payload: []});
+        else {
+            res.json({ codigo: -1, mensaje: "Error cargando producto", payload: [] });
         }
     }
 
-   
-    
 
-    catch(error){
+
+
+    catch (error) {
+        console.error("Error en cargarProducto:", error);
         res.status(500);
         res.send(error.message)
     }
 }
 
-const modificarStock = async(req, res) => {
-    try{
+const modificarStock = async (req, res) => {
+    try {
         const resultadoVerificar = verificarToken(req);
-        if(resultadoVerificar.estado == false){
-            return res.send({codigo: -1, mensaje: resultadoVerificar.error})
+        if (resultadoVerificar.estado == false) {
+            return res.send({ codigo: -1, mensaje: resultadoVerificar.error })
         }
-        const{
-           id_inventario,
-           stock
+        const {
+            id_inventario,
+            stock
         } = req.body
         const connection = await getConnection();
         const response = await connection.query("UPDATE inventario i set i.stock = ? where id_inventario = ?", [stock, id_inventario]);
-        if(response && response.affectedRows > 0){
+        if (response && response.affectedRows > 0) {
             res.json({
                 codigo: 200,
                 mensaje: "Stock modificado correctamente",
                 payload: []
             });
         }
-        else{
-            res.json({codigo: -1, mensaje: "Error modificando stock", payload: []});
+        else {
+            res.json({ codigo: -1, mensaje: "Error modificando stock", payload: [] });
         }
     }
 
-    catch(error){
+    catch (error) {
         res.status(500);
         res.send(error.message)
     }
 }
 
 const crearInventario = async (req, res) => {
-    try{
+    try {
         const resultadoVerificar = verificarToken(req);
-        if(resultadoVerificar.estado == false){
-            return res.send({codigo: -1, mensaje: resultadoVerificar.error})
+        if (resultadoVerificar.estado == false) {
+            return res.send({ codigo: -1, mensaje: resultadoVerificar.error })
         }
         const {
             talle,
@@ -142,28 +143,28 @@ const crearInventario = async (req, res) => {
         }
         const connection = await getConnection();
         const response = await connection.query("INSERT inventario set ?", inventario);
-        if(response && response.affectedRows > 0){
+        if (response && response.affectedRows > 0) {
             res.json({
                 codigo: 200,
                 mensaje: "Inventario creado exitosamente",
                 payload: [{ idCategoria: response.insertId }]
             });
         }
-        else{
-            res.json({codigo: -1, mensaje: "Error creando inventario", payload: []});
+        else {
+            res.json({ codigo: -1, mensaje: "Error creando inventario", payload: [] });
         }
     }
-    catch (error){
+    catch (error) {
         res.status(500);
         res.send(error.message);
     }
 }
 
 const crearCategoria = async (req, res) => {
-    try{
+    try {
         const resultadoVerificar = verificarToken(req);
-        if(resultadoVerificar.estado == false){
-            return res.send({codigo: -1, mensaje: resultadoVerificar.error})
+        if (resultadoVerificar.estado == false) {
+            return res.send({ codigo: -1, mensaje: resultadoVerificar.error })
         }
         const {
             nombre
@@ -171,37 +172,37 @@ const crearCategoria = async (req, res) => {
         const categoria = { nombre }
         const connection = await getConnection();
         const response = await connection.query("INSERT into categoria set ?", categoria);
-        if(response && response.affectedRows > 0){
+        if (response && response.affectedRows > 0) {
             res.json({
-            codigo: 200,
-            mensaje: "Categoría añadida",
-            payload: [{ idCategoria: response.insertId }]
-        });
+                codigo: 200,
+                mensaje: "Categoría añadida",
+                payload: [{ idCategoria: response.insertId }]
+            });
         }
-        
+
     }
-    catch(error){
+    catch (error) {
         res.status(500);
         res.send(error.message);
     }
 }
 
 const obtenerCategorias = async (req, res) => {
-   try{
-    const resultadoVerificar = verificarToken(req);
-        if(resultadoVerificar.estado == false){
-            return res.send({codigo: -1, mensaje: resultadoVerificar.error})
+    try {
+        const resultadoVerificar = verificarToken(req);
+        if (resultadoVerificar.estado == false) {
+            return res.send({ codigo: -1, mensaje: resultadoVerificar.error })
         }
-    const connection = await getConnection();
-    const response = await connection.query("SELECT * from categoria");
-    res.json({codigo: 200, mensaje: "OK", payload:  response});
-   }
-   catch(error){
+        const connection = await getConnection();
+        const response = await connection.query("SELECT * from categoria");
+        res.json({ codigo: 200, mensaje: "OK", payload: response });
+    }
+    catch (error) {
         res.status(500);
         res.send(error.message);
-   }
-    
-    
+    }
+
+
 }
 
 const agregarFavorito = async (req, res) => {
@@ -235,21 +236,22 @@ const agregarFavorito = async (req, res) => {
 };
 
 
-function verificarToken(req){
+function verificarToken(req) {
     const token = req.headers.authorization;
-    if(!token){
-        return {estado: false, error: "Token no proporcionado"}
+    if (!token) {
+        return { estado: false, error: "Token no proporcionado" }
     }
-    try{
+    try {
         const payload = jwt.verify(token, secret);
-        if(Date.now() > payload.exp){
-            return {estado: false, error: "Token expirado"}
+        if (Date.now() > payload.exp) {
+            return { estado: false, error: "Token expirado" }
         }
-        return {estado: true};
+        return { estado: true };
     }
-    catch(error){
-        return {estado: false, error: "Token inválido"}
-    }  
+    catch (error) {
+        console.error("verificarToken error in producto.controller.js:", error);
+        return { estado: false, error: "Token inválido" }
+    }
 
 }
 
@@ -263,7 +265,7 @@ const obtenerFavoritos = async (req, res) => {
         const id_usuario = req.params.id;
 
         const connection = await getConnection();
-        const response = await connection.query("SELECT id_producto as idProducto FROM favorito WHERE id_usuario = ?",[id_usuario]);
+        const response = await connection.query("SELECT id_producto as idProducto FROM favorito WHERE id_usuario = ?", [id_usuario]);
 
         res.json({
             codigo: 200,
@@ -361,7 +363,7 @@ const obtenerProductosCarrito = async (req, res) => {
         const id_usuario = req.params.id;
 
         const connection = await getConnection();
-        const response = await connection.query("SELECT c.id_carrito as idCarrito, c.id_inventario as idInventario, p.nombre as producto, p.id_producto as idProducto, p.precio as precio, p.imagen as urlImagen, i.talle, i.color FROM carrito c JOIN inventario i ON i.id_inventario = c.id_inventario JOIN producto p ON p.id_producto = i.id_producto WHERE c.id_usuario = ?;",[id_usuario]);
+        const response = await connection.query("SELECT c.id_carrito as idCarrito, c.id_inventario as idInventario, p.nombre as producto, p.id_producto as idProducto, p.precio as precio, p.imagen as urlImagen, i.talle, i.color FROM carrito c JOIN inventario i ON i.id_inventario = c.id_inventario JOIN producto p ON p.id_producto = i.id_producto WHERE c.id_usuario = ?;", [id_usuario]);
 
         res.json({
             codigo: 200,
@@ -381,11 +383,50 @@ const obtenerProductosCarrito = async (req, res) => {
 
 
 
+const modificarProducto = async (req, res) => {
+    try {
+        const resultadoVerificar = verificarToken(req);
+        if (resultadoVerificar.estado == false) {
+            return res.send({ codigo: -1, mensaje: resultadoVerificar.error });
+        }
+        const {
+            id_producto,
+            nombre,
+            descripcion,
+            precio,
+            genero,
+            id_categoria,
+            imagen
+        } = req.body;
+        
+        const connection = await getConnection();
+        const response = await connection.query(
+            "UPDATE producto SET nombre = ?, descripcion = ?, precio = ?, genero = ?, id_categoria = ?, imagen = ? WHERE id_producto = ?",
+            [nombre, descripcion, precio, genero, id_categoria, imagen, id_producto]
+        );
+        
+        if (response && response.affectedRows > 0) {
+            res.json({
+                codigo: 200,
+                mensaje: "Producto modificado correctamente",
+                payload: []
+            });
+        } else {
+            res.json({ codigo: -1, mensaje: "Error modificando producto", payload: [] });
+        }
+    } catch (error) {
+        console.error("Error en modificarProducto:", error);
+        res.status(500);
+        res.send(error.message);
+    }
+};
+
 export const methods = {
     fetchProductos,
     obtenerProductos,
     crearCategoria,
     cargarProducto,
+    modificarProducto,
     obtenerCategorias,
     obtenerDatosProducto,
     modificarStock,
@@ -396,6 +437,4 @@ export const methods = {
     agregarACarrito,
     eliminarProductoCarrito,
     obtenerProductosCarrito
-
-    
 }

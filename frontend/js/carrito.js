@@ -46,24 +46,21 @@ async function cargarCarrito() {
             groupedItems.forEach(item => {
                 const subtotal = item.precio * item.cantidad;
                 total += subtotal;
-                
+
                 const card = document.createElement('div');
                 card.className = 'cart-item';
-                card.style = 'display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; padding:10px; border-bottom:1px solid var(--border-color);';
                 card.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:15px;">
-                        ${item.imagen ? `<img src="${item.imagen}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">` : ''}
-                        <div>
-                            <h4 style="margin:0;">${item.nombre}</h4>
-                            <p style="margin:5px 0 0; font-size:0.9em; opacity:0.8;">
-                                Talle: ${item.talle} | Color: ${item.color} | Precio: $${item.precio.toLocaleString()}
-                            </p>
+                    <div class="cart-item-info">
+                        ${item.imagen ? `<img src="${item.imagen}" class="cart-item-img" alt="${item.nombre}">` : ''}
+                        <div class="cart-item-details">
+                            <h4>${item.nombre}</h4>
+                            <p>Talle: ${item.talle} | Color: ${item.color} | Precio: $${item.precio.toLocaleString()}</p>
                         </div>
                     </div>
-                    <div style="display:flex; align-items:center; gap:20px;">
-                        <span style="font-weight:bold;">Cant: ${item.cantidad}</span>
-                        <span style="font-weight:bold; width:80px; text-align:right;">$${subtotal.toLocaleString()}</span>
-                        <button class="btn-danger btn-eliminar-item" data-inv="${item.idInventario}" style="padding:5px 10px; font-size:0.9em;">Eliminar</button>
+                    <div class="cart-item-actions">
+                        <span class="cart-item-qty">Cant: ${item.cantidad}</span>
+                        <span class="cart-item-subtotal">$${subtotal.toLocaleString()}</span>
+                        <button class="btn-danger btn-eliminar-item" data-inv="${item.idInventario}">Eliminar</button>
                     </div>
                 `;
                 listaCarrito.appendChild(card);

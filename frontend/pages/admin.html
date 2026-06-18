@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Panel Admin - Lana & Lino</title>
+    <title>Panel Admin - Lana &amp; Lino</title>
     <link rel="stylesheet" href="../css/global.css">
 </head>
 
@@ -11,76 +11,108 @@
     <main class="container">
         <h1>Gestionar Productos</h1>
 
-        <!-- Sección para Buscar y Modificar[cite: 1] -->
-        <section style="background: var(--nav-bg); padding: 20px; margin-bottom: 20px; border-radius: 8px;">
+        <!-- Sección para Buscar y Modificar -->
+        <section class="admin-section">
             <h2>Buscar para Modificar</h2>
-            <input type="number" id="buscar-id-prod" placeholder="ID del Producto a modificar">
-            <button id="btn-buscar-modificar">Buscar Producto</button>
-            <button id="btn-ver-todos" style="margin-left: 10px;">Ver Todos</button>
+            <div class="search-group">
+                <input type="number" id="buscar-id-prod" placeholder="ID del Producto a modificar">
+                <button id="btn-buscar-modificar" class="btn-primary">Buscar Producto</button>
+                <button id="btn-ver-todos" class="btn-secondary">Ver Todos</button>
+            </div>
             <p id="msj-busqueda"></p>
-            <div id="lista-productos-admin" style="display:none; margin-top: 15px; max-height: 300px; overflow-y: auto; background: var(--clr-surface-2); padding: 15px; border-radius: 8px;"></div>
+            <div id="lista-productos-admin"
+                style="display:none; margin-top: 15px; max-height: 300px; overflow-y: auto; background: var(--clr-surface-2); padding: 15px; border-radius: var(--radius-md); border: 1px solid var(--clr-border);">
+            </div>
         </section>
 
         <!-- Formulario (Sirve para crear y para modificar) -->
-        <section style="background: var(--nav-bg); padding: 20px; border-radius: 8px;">
+        <section class="admin-section">
             <h2 id="titulo-formulario">Cargar Nuevo Producto</h2>
-            <form id="form-producto">
-                <label>ID del Producto:</label><br>
-                <input type="text" id="prod-id" disabled placeholder="Automático o buscado"><br><br>
+            <form id="form-producto" class="admin-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="prod-id">ID del Producto:</label>
+                        <input type="text" id="prod-id" disabled placeholder="Automático o buscado">
+                    </div>
 
-                <label>Nombre:</label><br>
-                <input type="text" id="prod-nombre" required><br><br>
+                    <div class="form-group">
+                        <label for="prod-nombre">Nombre:</label>
+                        <input type="text" id="prod-nombre" required>
+                    </div>
 
-                <label>Descripción:</label><br>
-                <textarea id="prod-desc" required></textarea><br><br>
+                    <div class="form-group full-width">
+                        <label for="prod-desc">Descripción:</label>
+                        <textarea id="prod-desc" required class="form-textarea"
+                            placeholder="Breve descripción del producto..."></textarea>
+                    </div>
 
-                <label>URL de la Imagen:</label><br>
-                <input type="text" id="prod-imagen" placeholder="https://..."><br><br>
+                    <div class="form-group">
+                        <label for="prod-imagen">URL de la Imagen:</label>
+                        <input type="text" id="prod-imagen" placeholder="https://...">
+                    </div>
 
-                <label>Precio:</label><br>
-                <input type="number" id="prod-precio" required><br><br>
+                    <div class="form-group">
+                        <label for="prod-precio">Precio:</label>
+                        <input type="number" id="prod-precio" required>
+                    </div>
 
-                <label>Género:</label><br>
-                <select id="prod-genero">
-                    <option value="">Seleccione...</option>
-                    <option value="Femenino">Femenino</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Unisex">Unisex</option>
-                </select><br><br>
+                    <div class="form-group">
+                        <label for="prod-genero">Género:</label>
+                        <select id="prod-genero">
+                            <option value="">Seleccione...</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Unisex">Unisex</option>
+                        </select>
+                    </div>
 
-                <label>Color:</label><br>
-                <select id="prod-color">
-                    <option value="">Seleccione...</option>
-                    <option value="Negro">Negro</option>
-                    <option value="Blanco">Blanco</option>
-                    <option value="Rojo">Rojo</option>
-                    <option value="Azul">Azul</option>
-                    <option value="Beige">Beige</option>
-                    <option value="Verde">Verde</option>
-                    <option value="Gris">Gris</option>
-                    <option value="Amarillo">Amarillo</option>
-                    <option value="Rosa">Rosa</option>
-                    <option value="Natural">Natural</option>
-                </select><br><br>
+                    <div class="form-group">
+                        <label for="prod-color">Color:</label>
+                        <select id="prod-color">
+                            <option value="">Seleccione...</option>
+                            <option value="Negro">Negro</option>
+                            <option value="Blanco">Blanco</option>
+                            <option value="Rojo">Rojo</option>
+                            <option value="Azul">Azul</option>
+                            <option value="Beige">Beige</option>
+                            <option value="Verde">Verde</option>
+                            <option value="Gris">Gris</option>
+                            <option value="Amarillo">Amarillo</option>
+                            <option value="Rosa">Rosa</option>
+                            <option value="Natural">Natural</option>
+                        </select>
+                    </div>
 
-                <label>ID Categoría:</label><br>
-                <input type="number" id="prod-categoria" required><br><br>
+                    <div class="form-group">
+                        <label for="prod-categoria">Categoría:</label>
+                        <select id="prod-categoria" required>
+                            <option value="">Seleccione...</option>
+                        </select>
+                    </div>
 
-                <label>Talle:</label><br>
-                <select id="prod-talle" required>
-                    <option value="Único">Único</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                    <option value="XXL">XXL</option>
-                </select><br><br>
+                    <div class="form-group">
+                        <label for="prod-talle">Talle:</label>
+                        <select id="prod-talle" required>
+                            <option value="Único">Único</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                        </select>
+                    </div>
 
-                <label>Stock Disponible:</label><br>
-                <input type="number" id="prod-stock" required placeholder="Cantidad"><br><br>
+                    <div class="form-group">
+                        <label for="prod-stock">Stock Disponible:</label>
+                        <input type="number" id="prod-stock" required placeholder="Cantidad">
+                    </div>
+                </div>
 
-                <button type="submit" id="btn-guardar-prod">Guardar Producto</button>
-                <button type="button" id="btn-cancelar-edicion" style="display:none;">Cancelar Edición</button>
+                <div class="form-actions">
+                    <button type="submit" id="btn-guardar-prod" class="btn-primary">Guardar Producto</button>
+                    <button type="button" id="btn-cancelar-edicion" class="btn-danger" style="display:none;">Cancelar
+                        Edición</button>
+                </div>
             </form>
         </section>
     </main>

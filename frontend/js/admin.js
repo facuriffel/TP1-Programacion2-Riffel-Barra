@@ -12,6 +12,24 @@ if (!token || rol !== 'Administrador') {
 
 renderHeader();
 
+const loadCategories = async () => {
+    try {
+        const res = await consultarAPI('/obtenerCategorias');
+        const categories = res.payload || res;
+        const select = document.getElementById('prod-categoria');
+        select.innerHTML = '<option value="">Seleccione...</option>';
+        categories.forEach(cat => {
+            const opt = document.createElement('option');
+            opt.value = cat.id_categoria || cat.idCategoria;
+            opt.innerText = cat.nombre || cat.categoria;
+            select.appendChild(opt);
+        });
+    } catch (error) {
+        console.error('Error al cargar categorías:', error);
+    }
+};
+loadCategories();
+
 const form = document.getElementById('form-producto');
 const btnCancelar = document.getElementById('btn-cancelar-edicion');
 const tituloFormulario = document.getElementById('titulo-formulario');
@@ -97,9 +115,9 @@ form.addEventListener('submit', async (e) => {
 
     const idExistente = document.getElementById('prod-id').value;
 
-    const nombre = document.getElementById('prod-nombre').value;
-    const descripcion = document.getElementById('prod-desc').value;
-    const imagen = document.getElementById('prod-imagen').value;
+    const nombre = document.getElementById('prod-nombre').value.trim();
+    const descripcion = document.getElementById('prod-desc').value.trim();
+    const imagen = document.getElementById('prod-imagen').value.trim();
     const precio = parseFloat(document.getElementById('prod-precio').value);
     const genero = document.getElementById('prod-genero').value;
     const color = document.getElementById('prod-color').value;
@@ -110,6 +128,17 @@ form.addEventListener('submit', async (e) => {
     try {
         if (idExistente) {
             // Modificación:
+            // 0. Actualizar datos generales del producto en la base de datos
+            await consultarAPI('/modificarProducto', 'PUT', {
+                id_producto: parseInt(idExistente),
+                nombre,
+                descripcion,
+                precio,
+                genero,
+                id_categoria,
+                imagen: imagen || 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&q=80'
+            });
+
             // 1. Si el producto ya tiene un registro de inventario, actualizamos el stock del mismo
             if (loadedInventarios.length > 0) {
                 const primaryInv = loadedInventarios[0];
@@ -126,7 +155,7 @@ form.addEventListener('submit', async (e) => {
                     id_producto: parseInt(idExistente)
                 });
             }
-            alert('¡El stock del producto se actualizó con éxito en la base de datos! (Los demás campos se simularon en el cliente de acuerdo a los límites del backend).');
+            alert('¡El producto y su stock se actualizaron con éxito en la base de datos!');
         } else {
             // Creación:
             // 1. Cargamos el producto
@@ -163,7 +192,7 @@ form.addEventListener('submit', async (e) => {
 
 document.getElementById('btn-ver-todos').addEventListener('click', async () => {
     const contenedor = document.getElementById('lista-productos-admin');
-    
+
     if (contenedor.style.display === 'block') {
         contenedor.style.display = 'none';
         return;
@@ -172,10 +201,10 @@ document.getElementById('btn-ver-todos').addEventListener('click', async () => {
     try {
         contenedor.innerHTML = '<p>Cargando productos...</p>';
         contenedor.style.display = 'block';
-        
+
         const res = await consultarAPI('/obtenerProductos');
         const productos = res.payload || res;
-        
+
         if (!productos || productos.length === 0) {
             contenedor.innerHTML = '<p>No hay productos cargados en la base de datos.</p>';
             return;
@@ -183,7 +212,7 @@ document.getElementById('btn-ver-todos').addEventListener('click', async () => {
 
         let html = '<table style="width:100%; text-align:left; border-collapse: collapse;">';
         html += '<tr><th style="border-bottom: 1px solid var(--clr-border); padding: 5px;">ID</th><th style="border-bottom: 1px solid var(--clr-border); padding: 5px;">Nombre</th><th style="border-bottom: 1px solid var(--clr-border); padding: 5px;">Precio</th></tr>';
-        
+
         productos.forEach(p => {
             html += `<tr>
                 <td style="padding: 5px; font-weight: bold; color: var(--clr-primary);">${p.id_producto || p.idProducto}</td>
@@ -191,10 +220,10 @@ document.getElementById('btn-ver-todos').addEventListener('click', async () => {
                 <td style="padding: 5px;">$${p.precio}</td>
             </tr>`;
         });
-        
+
         html += '</table>';
         contenedor.innerHTML = html;
-        
+
     } catch (error) {
         console.error('Error al obtener productos:', error);
         contenedor.innerHTML = '<p style="color:var(--clr-danger);">Error al cargar los productos.</p>';
